@@ -52,7 +52,7 @@ class RefundRequest(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="refund_requests")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="refund_requests")
     reason = models.TextField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")  #get_status_display will be used to show human readable status in templates
     created_at = models.DateTimeField()
 
 

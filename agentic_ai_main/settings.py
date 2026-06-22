@@ -56,7 +56,7 @@ ROOT_URLCONF = 'agentic_ai_main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ["templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,3 +126,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+LOGIN_REDIRECT_URL = '/orders/'  # Redirect to orders dashboard after login
+
+LOGOUT_REDIRECT_URL = '/login/'  # Redirect to login page after logout
+
+LOGIN_URL = '/login/'  # URL to redirect users to for login
