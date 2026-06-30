@@ -198,6 +198,47 @@
       background: #2d2d4e;
       color: #fff;
     }
+
+    #chat-box {
+      height: 500px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+    }
+
+    #chat-box.visible {
+      opacity: 1;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      
+    }
+
+    .agent-message{
+      background: #f3f4f6;
+      border-radius: 0 10px 10px 10px;
+    }
+
+     .agent-message:hover {
+      background: #c4c4cb;
+      border-radius: 0 10px 10px 10px;
+    }
+
+    .customer-message{
+      background: #1a1a2e;
+      color: #fff;
+      border-radius: 10px 0 10px 10px;
+      margin-left: auto;
+    }
+
+    .customer-message:hover {
+      background: #2d2d4e;
+      color: #fff;
+    }
+
   </style>
 </head>
 <body>
@@ -282,18 +323,90 @@
 
     </div>
 
+    
     <div class="col-md-4">
-      <div class="help-card">
+
+      <!-- Help Card - visible by default -->
+      <div class="help-card" id="help-card">
         <div style="font-size:32px;">💬</div>
         <h6>Need help with this order?</h6>
         <p>Our AI support agent can help you with delivery issues, refunds, or any other concerns.</p>
-        <a href="#" class="btn-help">Get Help</a>
+        <button onclick="showChat()" class="btn-help">Get Help</button>
       </div>
+
+      <!-- Chat box - hidden by default -->
+      <div id="chat-box" class="card">
+        <!-- Header -->
+        <div class="card-header d-flex align-items-center gap-2">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background-color: green;"></div>
+          <span class="fw-semibold" style="font-size: 13px;">Support Agent</span>
+        </div>
+
+        <!-- Chat Area -->
+          <div id="chat-messages" class="chat-messages p-3 d-flex flex-column gap-2">
+            <div class="agent-message p-2 px-3 mb-2" style="font-size: 13px; max-width: 85%">
+              Hi User, I'm Nora, your AI support agent. How can I assist you with your order today?
+
+            </div>
+          </div>
+        <!-- Chat footer -->
+        <div class="card-footer d-flex">
+            <input type="text" id="chat-input" class="form-control form-control-sm" placeholder="Type your message..." />
+            <button class="btn btn-dark btn-sm px-3" onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+
+    
     </div>
 
   </div>
 
 </div>
+<script>
 
+    // show the chat box and hide the help card
+    function showChat() {
+        document.getElementById('help-card').style.display = 'none';
+
+        const chatBox = document.getElementById('chat-box');
+
+        chatBox.classList.add("visible");
+
+    }  
+
+    // Helper Function to append messages to the chat area
+    function appendMessage(text, type) {
+        const messages = document.getElementById("chat-messages");
+
+        const div = document.createElement("div");
+        div.classList.add(type === "customer" ? "customer-message" : "agent-message");
+        div.classList.add("p-2", "px-3");
+        div.style.fontSize = "13px";
+        div.style.maxWidth = "85%";
+        div.innerText = text;
+
+        messages.appendChild(div);
+
+    }
+
+    function sendMessage() {
+        const input = document.getElementById("chat-input");
+        const message = input.value.trim();
+
+        // Don't send empty messages
+        if(!message) return;
+
+        appendMessage(message, "customer")
+
+        input.value = "";
+
+    }
+
+    // Optional: Handle pressing Enter to send message
+    document.getElementById("chat-input").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") sendMessage();
+            
+    });
+</script>
 </body>
 </html>
