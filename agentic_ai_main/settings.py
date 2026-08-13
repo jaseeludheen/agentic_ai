@@ -135,3 +135,9 @@ LOGIN_REDIRECT_URL = '/orders/'  # Redirect to orders dashboard after login
 LOGOUT_REDIRECT_URL = '/login/'  # Redirect to login page after logout
 
 LOGIN_URL = '/login/'  # URL to redirect users to for login
+
+
+
+## Anthropic API Configuration
+ANTHROPIC_API_KEY = config("ANTHROPIC_API_KEY")
+ANTHROPIC_MODEL = config("ANTHROPIC_MODEL")
