@@ -364,6 +364,20 @@
 </div>
 <script>
 
+    function showTyping(){
+      const messages = document.getElementById("chat-messages");
+      messages.insertAdjacentHTML("beforeend", `
+      <div id="typing-indicator" class="agent-message p-2" style="font-size: 13px; max-width: 85%">
+        Typing....
+      </div>
+      `)
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function hideTyping(){
+      document.getElementById("typing-indicator").remove();
+    }
+
     // show the chat box and hide the help card
     function showChat() {
         document.getElementById('help-card').style.display = 'none';
@@ -386,12 +400,15 @@
         div.innerText = text;
 
         messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
 
     }
 
-    function sendMessage() {
+    async function sendMessage() {
         const input = document.getElementById("chat-input");
         const message = input.value.trim();
+
+        // console.log("Sending message ==>", message);
 
         // Don't send empty messages
         if(!message) return;
@@ -400,13 +417,39 @@
 
         input.value = "";
 
-    }
+        // show typing after 2 seconds
+        setTimeout( () => showTyping(), 2000 ); 
+
+        // send message to django view
+        try{
+          const response = await fetch("/support/chat/{{order.id}}/", {       // where to send
+            method: "POST",                            // how to send
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": "{{ csrf_token }}",
+            },
+            body: JSON.stringify({ message: message }) // what to send  
+
+          })
+
+          // console.log('response ==>', await response.json());
+          const data = await response.json()
+          hideTyping();
+          appendMessage(data.reply, "agent")
+        }catch(error){
+
+          console.error("Error: ", error)
+          appendMessage("Sorry, something went wrong.", "agent")
+
+        }
 
     // Optional: Handle pressing Enter to send message
     document.getElementById("chat-input").addEventListener("keypress", function(e) {
         if (e.key === "Enter") sendMessage();
             
     });
+
+  } 
 </script>
 </body>
 </html>

@@ -16,4 +16,6 @@ urlpatterns = [
 
 
     path('orders/', include('orders.urls')),  # Include the orders app URLs
+    path('support/', include('support.urls')),  # Include the support app URLs
+    
 ]   
